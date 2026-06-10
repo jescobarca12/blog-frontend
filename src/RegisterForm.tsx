@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { API_URL } from './config';
 
-interface LoginFormProps {
+interface RegisterFormProps {
   onLogin: (token: string) => void;
   onCambiar: () => void;
 }
 
-function LoginForm({ onLogin, onCambiar }: LoginFormProps) {
+function RegisterForm({ onLogin, onCambiar }: RegisterFormProps) {
   const [email, setEmail] = useState('');
+  const [nombre, setNombre] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
 
@@ -16,19 +17,19 @@ function LoginForm({ onLogin, onCambiar }: LoginFormProps) {
     setError(null);
 
     try {
-      const response = await fetch(`${API_URL}/auth/login`, {
+      const response = await fetch(`${API_URL}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, nombre, password }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Error de login');
+        throw new Error(errorData.error || 'No se pudo registrar');
       }
 
       const data = await response.json();
-      onLogin(data.token); // notifica al padre
+      onLogin(data.token); // queda logueado automáticamente tras registrarse
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error desconocido');
     }
@@ -37,14 +38,14 @@ function LoginForm({ onLogin, onCambiar }: LoginFormProps) {
   return (
     <div className="auth-container">
       <form className="auth-card" onSubmit={handleSubmit}>
-        <h2>Iniciar sesión</h2>
+        <h2>Crear cuenta</h2>
 
         {error && <p className="auth-error">{error}</p>}
 
         <div className="form-group">
-          <label htmlFor="login-email">Email</label>
+          <label htmlFor="reg-email">Email</label>
           <input
-            id="login-email"
+            id="reg-email"
             className="input"
             type="email"
             value={email}
@@ -55,28 +56,42 @@ function LoginForm({ onLogin, onCambiar }: LoginFormProps) {
         </div>
 
         <div className="form-group">
-          <label htmlFor="login-password">Contraseña</label>
+          <label htmlFor="reg-nombre">Nombre</label>
           <input
-            id="login-password"
+            id="reg-nombre"
+            className="input"
+            type="text"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            placeholder="Tu nombre"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="reg-password">Contraseña</label>
+          <input
+            id="reg-password"
             className="input"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Tu contraseña"
+            placeholder="Mínimo 8 caracteres"
+            minLength={8}
             required
           />
         </div>
 
         <button className="btn btn-primary" type="submit">
-          Entrar
+          Registrarme
         </button>
 
         <button className="btn-link" type="button" onClick={onCambiar}>
-          ¿No tienes cuenta? Regístrate
+          ¿Ya tienes cuenta? Inicia sesión
         </button>
       </form>
     </div>
   );
 }
 
-export default LoginForm;
+export default RegisterForm;

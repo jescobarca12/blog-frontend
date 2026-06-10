@@ -1,73 +1,66 @@
-# React + TypeScript + Vite
+# 📝 Blog — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Cliente web de un blog construido con React. Permite registrarse, iniciar sesión
+y gestionar posts. Consume la API
+[blog-api](https://github.com/jescobarca12/blog-api).
 
-Currently, two official plugins are available:
+<!-- TODO (con tus palabras): añade 2-3 líneas sobre POR QUÉ hiciste este proyecto
+     y qué querías practicar de React. Eso le da alma al README. -->
+<!-- Sugerencia: añade una captura de la app en docs/captura.png y descomenta:
+     ![Blog](docs/captura.png) -->
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Características
 
-## React Compiler
+- Registro de cuenta con inicio de sesión automático.
+- Inicio de sesión con JWT (el token se guarda en `localStorage`).
+- Alternancia entre pantallas de login y registro.
+- Listar, crear y eliminar posts (las acciones protegidas envían el token).
+- Manejo de errores visible para el usuario.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Stack
 
-## Expanding the ESLint configuration
+React 19, TypeScript y Vite.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Estructura
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── App.tsx          # estado de sesión (token) y enrutado entre login/registro/blog
+├── LoginForm.tsx    # formulario de inicio de sesión
+├── RegisterForm.tsx # formulario de registro
+├── BlogPosts.tsx    # listado y creación de posts
+├── config.ts        # lee la URL de la API desde VITE_API_URL
+├── types.ts         # tipos compartidos
+└── index.css        # estilos de la aplicación
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Instalación
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Requisitos: Node.js 22.12+ y la [blog-api](https://github.com/jescobarca12/blog-api)
+corriendo.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+# crea un archivo .env (ver abajo)
+npm run dev          # http://localhost:5173
 ```
+
+Variable de entorno (`.env`):
+```
+VITE_API_URL=http://localhost:3000
+```
+
+## Decisiones técnicas
+
+- **Sesión con JWT en `localStorage`** — el token persiste al recargar; al cerrar
+  sesión se elimina.
+- **Estado de sesión en el componente raíz** — `App` decide qué mostrar (login,
+  registro o el blog) según haya token o no.
+- **URL de la API por variable de entorno** (`VITE_API_URL`) — el mismo código
+  apunta a localhost en desarrollo y a la API desplegada en producción.
+- **Comunicación hijo → padre por props** — los formularios avisan a `App` del
+  login mediante una función `onLogin` recibida por props.
+
+## Autor
+
+Jorge — Estudiante de Ingeniería de Sistemas.
