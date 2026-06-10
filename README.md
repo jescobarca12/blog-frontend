@@ -4,8 +4,13 @@ Cliente web de un blog construido con React. Permite registrarse, iniciar sesió
 y gestionar posts. Consume la API
 [blog-api](https://github.com/jescobarca12/blog-api).
 
-<!-- TODO (con tus palabras): añade 2-3 líneas sobre POR QUÉ hiciste este proyecto
-     y qué querías practicar de React. Eso le da alma al README. -->
+## Sobre el proyecto
+
+Este fue el primer proyecto que construí desde cero. Quería aprender a construir
+una aplicación completa y entender todo lo posible, no solo seguir un tutorial.
+Todo era nuevo para mí y al principio me costó mucho, pero terminé muy satisfecho
+por lo demasiado que aprendí en el camino.
+
 <!-- Sugerencia: añade una captura de la app en docs/captura.png y descomenta:
      ![Blog](docs/captura.png) -->
 
